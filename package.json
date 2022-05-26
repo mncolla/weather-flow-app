@@ -2,19 +2,22 @@
   "name": "weather-flow-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "faker": "^6.6.6",
+    "@fastify/autoload": "^4.0.1",
+    "@fastify/env": "^3.0.0",
     "fastify": "^3.29.0",
-    "fastify-autoload": "^3.13.0",
-    "fastify-plugin": "^3.0.1"
+    "fastify-cli": "^3.1.0",
+    "fastify-plugin": "^3.0.1",
+    "node-fetch": "^3.2.4"
   },
   "devDependencies": {
     "eslint": "^8.16.0",
