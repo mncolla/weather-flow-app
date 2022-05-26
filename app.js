@@ -7,7 +7,7 @@ import fastifyEnv from '@fastify/env';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const app = fastify({ logger: true, trustProxy: true });
+const app = fastify({ trustProxy: true });
 
 const schema = {
 	type: 'object',
@@ -49,7 +49,7 @@ start();
 (async () => {
 	try {
 		await app.ready();
-		await app.listen(3000);
+		await app.listen(3000, '0.0.0.0');
 	} catch (error) {
 		app.log.error(error);
 		process.exit(1);
