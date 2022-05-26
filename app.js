@@ -1,9 +1,16 @@
-import { Fastify } from 'fastify';
-const fastify = Fastify();
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import fastify from 'fastify';
+import autoload from '@fastify/autoload';
 
-fastify.get('/', async (req, rep) => 'Hello world get');
-fastify.post('/', async (req, rep) => 'Hello world post');
-fastify.delete('/', async (req, rep) => 'Hello world delete');
-fastify.put('/', async (req, rep) => 'Hello world put');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-fastify.listen(3000, () => console.log('Running in 3000 port'));
+const app = fastify();
+
+app.register(autoload, {
+	dir: join(__dirname, 'routes/v1'),
+	options: Object.assign({}, { prefix: 'v1' }),
+});
+
+app.listen(3000);
