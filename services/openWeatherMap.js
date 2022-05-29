@@ -1,9 +1,24 @@
 import fetch from 'node-fetch';
 
-const OWM_API_URL =
-	'https://api.openweathermap.org/data/3.0/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid={API key}';
+const OWM_URL_BASE =
+	'https://api.openweathermap.org/data/2.5/TYPE?q=CITY&appid=APIKEY';
+const OWN_API_KEY = '2ccdeafa04e246cbbfee81b1d58b70d3';
 
-export const openWeatherMap = async () => {
-	const response = await fetch('https://api.github.com/users/github');
-	const data = await response.json();
+export const getForecastByCity = async city => {
+	return await getQuery(city, 'forecast');
+};
+
+export const getWeatherByCity = async city => {
+	return await getQuery(city, 'weather');
+};
+
+const getQuery = async (city, type) => {
+	const url = OWM_URL_BASE.replace('TYPE', type)
+		.replace('CITY', city)
+		.replace('APIKEY', OWN_API_KEY);
+
+	const res = await fetch(url);
+	const data = await res.json();
+
+	return data;
 };
