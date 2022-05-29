@@ -1,25 +1,20 @@
-import {
-	getForecastByCity,
-	getWeatherByCity,
-} from '../../../services/openWeatherMap.js';
-import { getLocation } from '../../../services/ipApi.js';
+import OpenWeatherMap from '../../../services/openWeatherMap.js';
+import IpApi from '../../../services/ipApi.js';
 
 export default async (fastify, opts) => {
 	fastify.get('/:city', async (request, reply) => {
-		const location = await getLocation('186.57.170.113');
-		return location;
+		const owm = new OpenWeatherMap('weather');
+		owm.setCity(request.params.city);
+		const weather = await owm.execute();
+		return weather;
 	});
 
 	fastify.get('/', async (request, reply) => {
-		const ip = (
-			request.headers['x-forwarded-for'] ||
-			request.socket.remoteAddress ||
-			''
-		)
-			.split(',')[0]
-			.trim();
-		const location = await getLocation('186.57.170.113');
-		const weather = await getWeatherByCity(location.city);
+		const ipapi = new IpApi(request);
+		const location = await ipapi.execute();
+		const owm = new OpenWeatherMap('weather');
+		owm.setCoords(location.lat, location.lon);
+		const weather = await owm.execute();
 		return {
 			location,
 			weather,
