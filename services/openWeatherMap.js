@@ -1,24 +1,39 @@
 import fetch from 'node-fetch';
 
-const OWM_URL_BASE =
-	'https://api.openweathermap.org/data/2.5/TYPE?q=CITY&appid=APIKEY';
-const OWN_API_KEY = '2ccdeafa04e246cbbfee81b1d58b70d3';
+export default class OpenWeatherMap {
+	_url_base = 'https://api.openweathermap.org/data/2.5/';
+	_query_type;
+	_city;
+	_lat;
+	_long;
 
-export const getForecastByCity = async city => {
-	return await getQuery(city, 'forecast');
-};
+	constructor(type) {
+		this._query_type = type;
+	}
 
-export const getWeatherByCity = async city => {
-	return await getQuery(city, 'weather');
-};
+	setCity = city => {
+		this._city = city;
+	};
 
-const getQuery = async (city, type) => {
-	const url = OWM_URL_BASE.replace('TYPE', type)
-		.replace('CITY', city)
-		.replace('APIKEY', OWN_API_KEY);
+	setCoords = (lat, lon) => {
+		this._lat = lat;
+		this._lon = lon;
+	};
 
-	const res = await fetch(url);
-	const data = await res.json();
+	execute = async () => {
+		const url = this.build();
+		const res = await fetch(url);
+		const data = await res.json();
 
-	return data;
-};
+		return data;
+	};
+
+	build = () => {
+		const url = new URL(this._url_base + this._query_type);
+		this._city && url.searchParams.set('q', this._city);
+		this._lat && url.searchParams.set('lat', this._lat);
+		this._lon && url.searchParams.set('lon', this._lon);
+		url.searchParams.set('appid', '2ccdeafa04e246cbbfee81b1d58b70d3');
+		return url.toString();
+	};
+}
