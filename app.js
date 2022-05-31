@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import schema from './schemas/envSchema.js';
 import fastify from 'fastify';
 import autoload from '@fastify/autoload';
 import fastifyEnv from '@fastify/env';
@@ -7,22 +8,12 @@ import fastifyEnv from '@fastify/env';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const app = fastify({ trustProxy: true });
-
-const schema = {
-	type: 'object',
-	required: ['PORT'],
-	properties: {
-		PORT: {
-			type: 'string',
-			default: 3000,
-		},
-		OWM_API_KEY: {
-			type: 'string',
-			default: null,
-		},
+const app = fastify({
+	trustProxy: true,
+	logger: {
+		prettyPrint: true,
 	},
-};
+});
 
 const options = {
 	confKey: 'config',
